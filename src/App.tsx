@@ -1,8 +1,18 @@
 import "./App.css";
-import KanbanBoard from "./components/KanbanBoard";
+import "@fortawesome/fontawesome-free/css/all.css";
+import { BrowserRouter as Router } from "react-router-dom";
+import RouterPrincipal from "./components/router/RouterPrincipal";
+import HomePage from "./pages/HomePage";
 
 function App() {
-  return <KanbanBoard />;
+  return (
+    <Router>
+      <div className="App">
+        <RouterPrincipal />
+        <HomePage />
+      </div>
+    </Router>
+  );
 }
 
 export default App;
