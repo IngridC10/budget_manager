@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Id, Task } from "../types";
+import { Id } from "../types";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,10 +15,11 @@ import PlusIcon from "../icons/PlusIcon";
 import IconsCategoryList from "./IconsCategoryListComponent";
 import CategorySelect from "./CategoryComponent";
 import OwnerExpenses from "./OwnerExpenses";
+import { Card } from "./KanbanBoard";
 // import IconSelect from "./IconsCategoryListComponent";
 
 interface Props {
-  task: Task;
+  task: Card;
   deleteTask: (id: Id) => void;
   updateTask: (id: Id, content: string) => void;
   isModalOpenDetailState: boolean;

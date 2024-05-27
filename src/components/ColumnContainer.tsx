@@ -1,10 +1,11 @@
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import TrashIcon from "../icons/TrashIcon";
-import { Column, Id, Task } from "../types";
+import { Column, Id } from "../types";
 import { CSS } from "@dnd-kit/utilities";
 import { useMemo, useState } from "react";
 import PlusIcon from "../icons/PlusIcon";
 import TaskCard from "./TaskCard";
+import { Card } from "./KanbanBoard";
 
 interface Props {
   column: Column;
@@ -13,7 +14,7 @@ interface Props {
   createTask: (columnId: Id) => void;
   updateTask: (id: Id, content: string) => void;
   deleteTask: (id: Id) => void;
-  tasks: Task[];
+  cards: Card[];
   isModalOpenDetailState: boolean;
   setIsModalOpenDetailState: React.Dispatch<React.SetStateAction<boolean>>;
   isModalOpenAddCategoryState: boolean;
@@ -27,7 +28,7 @@ const ColumnContainer: React.FC<Props> = ({
   deleteColumn,
   updateColumn,
   createTask,
-  tasks,
+  cards,
   deleteTask,
   updateTask,
   isModalOpenDetailState,
@@ -39,7 +40,7 @@ const ColumnContainer: React.FC<Props> = ({
 }) => {
   const [editMode, setEditMode] = useState(false);
 
-  const tasksIds = useMemo(() => tasks.map((task) => task.id), [tasks]);
+  const tasksIds = useMemo(() => cards.map((task) => task.id), [cards]);
 
   const {
     setNodeRef,
@@ -122,7 +123,7 @@ const ColumnContainer: React.FC<Props> = ({
         </div>
 
         <SortableContext items={tasksIds}>
-          {tasks.map((task) => (
+          {cards.map((card) => (
             <TaskCard
               isModalOpenAddCategoryState={isModalOpenAddCategoryState}
               setModalOpenAddCategoryState={setIsModalOpenAddCategoryState}
@@ -130,8 +131,8 @@ const ColumnContainer: React.FC<Props> = ({
               setIsModalOpenEditState={setIsModalOpenEditState}
               isSelected={false}
               onSelect={() => {}}
-              key={task.id}
-              task={task}
+              key={card.id}
+              task={card}
               deleteTask={deleteTask}
               updateTask={updateTask}
               isModalOpenDetailState={isModalOpenDetailState}

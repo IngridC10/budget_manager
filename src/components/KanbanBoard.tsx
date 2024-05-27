@@ -15,43 +15,75 @@ import {
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { createPortal } from "react-dom";
 import TaskCard from "./TaskCard";
-// import{ se } from "date-fns/locale";
 
-class Card {
-  id: number;
+export class Card {
+  id: Id;
   title: string;
   category: string;
   income: number;
   expenses: number;
+  columnId: Id;
+  content: string;
   constructor(
     id: number,
     title: string,
     category: string,
     income: number,
-    expenses: number
+    expenses: number,
+    columnId: number,
+    content: string
   ) {
     this.id = id;
     this.title = title;
     this.category = category;
     this.income = income;
     this.expenses = expenses;
+    this.columnId = columnId;
+    this.content = content;
   }
 }
 
-const getCard = [
-  new Card(0, "Gastos Personales", "Personal", 10000, 500),
-  new Card(1, "Gastos de Transporte", "Transporte", 2000, 400),
-  new Card(2, "Gastos en Salud", "Salud", 5000, 1000),
+const cardListMockUp = [
+  new Card(
+    0,
+    "Gastos de Viajes",
+    "Personal",
+    10000,
+    500,
+    0,
+    "Gastos de Viajes"
+  ),
+  new Card(
+    1,
+    "Gastos de Transporte",
+    "Transporte",
+    2000,
+    400,
+    1,
+    "Gastos de Transporte"
+  ),
+  new Card(2, "Gastos en Salud", "Salud", 5000, 1000, 2, "Gastos en Salud"),
 ];
+const getCardJSON = JSON.stringify(cardListMockUp, null, 2);
 
-// class Columns {
-//   id: number;
-//   title: string;
-//   constructor(id: number, title: string) {
-//     this.id = id;
-//     this.title = title;
-//   }
-// }
+console.log(getCardJSON);
+
+class Columns {
+  id: number;
+  title: string;
+  position: number;
+  constructor(id: number, title: string, position: number) {
+    this.id = id;
+    this.title = title;
+    this.position = position;
+  }
+}
+
+const columnsMockUp = [
+  new Columns(0, "Viajes", 0),
+  new Columns(1, "Transporte", 1),
+  new Columns(2, "Salud", 2),
+];
 
 // class Category{
 //   id: number;
@@ -63,10 +95,9 @@ const getCard = [
 
 // }
 
-console.log(getCard);
-const defaultTasks: Task[] = [
-  // Tus tareas por defecto
-];
+// const defaultTasks: Task[] = [
+//   // Tus tareas por defecto
+// ];
 const KanbanBoard: React.FC = () => {
   const [isModalOpenDetailState, setIsModalOpenDetailState] =
     useState<boolean>(false);
@@ -76,11 +107,13 @@ const KanbanBoard: React.FC = () => {
   const [isModalOpenEditState, setIsModalOpenEditState] =
     useState<boolean>(false);
 
-  const [columns, setColumns] = useState<Column[]>(getCard);
+  // const [columns, setColumns] = useState<Column[]>(cardListMockUp);
+
+  const [columns, setColumns] = useState<Column[]>(columnsMockUp);
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns]);
-  const [tasks, setTasks] = useState<Task[]>(defaultTasks);
+  const [cardsState, setCardsState] = useState<Card[]>(cardListMockUp);
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
-  const [activeTask, setActiveTask] = useState<Task | null>(null);
+  const [activeCard, setActiveCard] = useState<Card | null>(null);
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -113,7 +146,7 @@ const KanbanBoard: React.FC = () => {
                 createTask={createTask}
                 deleteTask={deleteTask}
                 updateTask={updateTask}
-                tasks={tasks.filter((task) => task.columnId === col.id)}
+                cards={cardsState.filter((card) => card.columnId === col.id)}
               />
             ))}
           </SortableContext>
@@ -159,10 +192,12 @@ const KanbanBoard: React.FC = () => {
               createTask={createTask}
               deleteTask={deleteTask}
               updateTask={updateTask}
-              tasks={tasks.filter((task) => task.columnId === activeColumn.id)}
+              cards={cardListMockUp.filter(
+                (card) => card.columnId === activeColumn.id
+              )}
             />
           )}
-          {activeTask && (
+          {activeCard && (
             <TaskCard
               onSelect={() => {}}
               isSelected={false}
@@ -174,7 +209,7 @@ const KanbanBoard: React.FC = () => {
               setIsModalOpenEditState={setIsModalOpenEditState}
               isModalOpenAddCategoryState={isModalOpenAddCategoryState}
               setModalOpenAddCategoryState={setIsModalOpenAddCategoryState}
-              task={activeTask}
+              task={activeCard}
               deleteTask={deleteTask}
               updateTask={updateTask}
             />
@@ -186,28 +221,33 @@ const KanbanBoard: React.FC = () => {
   );
 
   function createTask(columnId: Id) {
-    const newTask: Task = {
+    console.log("Creating task in column", columnId);
+    const newTask: Card = {
       id: generateId(),
       columnId,
       content: "",
+      title: "",
+      category: "",
+      income: 0,
+      expenses: 0,
       // content: `Task ${tasks.length + 1}`,
     };
 
-    setTasks([...tasks, newTask]);
+    setCardsState([...cardsState, newTask]);
   }
 
   function deleteTask(id: Id) {
-    const newTasks = tasks.filter((task) => task.id !== id);
-    setTasks(newTasks);
+    const newTasks = cardsState.filter((task) => task.id !== id);
+    setCardsState(newTasks);
   }
 
   function updateTask(id: Id, content: string) {
-    const newTasks = tasks.map((task) => {
+    const newTasks = cardsState.map((task) => {
       if (task.id !== id) return task;
       return { ...task, content };
     });
 
-    setTasks(newTasks);
+    setCardsState(newTasks);
   }
 
   function createNewColumn() {
@@ -223,8 +263,8 @@ const KanbanBoard: React.FC = () => {
     const filteredColumns = columns.filter((col) => col.id !== id);
     setColumns(filteredColumns);
 
-    const newTasks = tasks.filter((t) => t.columnId !== id);
-    setTasks(newTasks);
+    const newTasks = cardsState.filter((t) => t.columnId !== id);
+    setCardsState(newTasks);
   }
 
   function updateColumn(id: Id, title: string) {
@@ -242,15 +282,15 @@ const KanbanBoard: React.FC = () => {
       return;
     }
 
-    if (event.active.data.current?.type === "Task") {
-      setActiveTask(event.active.data.current.task);
+    if (event.active.data.current?.type === "Card") {
+      setActiveCard(event.active.data.current.task);
       return;
     }
   }
 
   function onDragEnd(event: DragEndEvent) {
     setActiveColumn(null);
-    setActiveTask(null);
+    setActiveCard(null);
 
     const { active, over } = event;
     if (!over) return;
@@ -290,7 +330,7 @@ const KanbanBoard: React.FC = () => {
 
     // Im dropping a Task over another Task
     if (isActiveATask && isOverATask) {
-      setTasks((tasks) => {
+      setCardsState((tasks) => {
         const activeIndex = tasks.findIndex((t) => t.id === activeId);
         const overIndex = tasks.findIndex((t) => t.id === overId);
 
@@ -308,7 +348,7 @@ const KanbanBoard: React.FC = () => {
 
     // Im dropping a Task over a column
     if (isActiveATask && isOverAColumn) {
-      setTasks((tasks) => {
+      setCardsState((tasks) => {
         const activeIndex = tasks.findIndex((t) => t.id === activeId);
 
         tasks[activeIndex].columnId = overId;
