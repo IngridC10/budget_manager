@@ -9,7 +9,7 @@ function App() {
     <Router>
       <div className="App">
         <RouterPrincipal />
-        <HomePage />
+        {/* <HomePage /> */}
       </div>
     </Router>
   );

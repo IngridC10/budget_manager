@@ -4,7 +4,7 @@ import HomePage from "../../pages/HomePage";
 const RouterPrincipal = () => {
   return (
     <Routes>
-      {/* <Route path="/" element={<HomePage />} /> */}
+      <Route path="/" element={<HomePage />} />
       <Route path="/home" element={<HomePage />} />
     </Routes>
   );
