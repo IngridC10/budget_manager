@@ -53,10 +53,10 @@ const categories = [
 ];
 
 const IconsCategoryList = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
-
+  const [selectedCategoryState, setSelectedCategoryState] =
+    useState<string>("");
   const handleSelectCategory = (category: string) => {
-    setSelectedCategory(category);
+    setSelectedCategoryState(category);
     console.log(`Categoría seleccionada: ${category}`);
   };
 
@@ -77,7 +77,7 @@ const IconsCategoryList = () => {
                   onClick={() => handleSelectCategory(item.name)}
                   style={{
                     backgroundColor:
-                      selectedCategory === item.name
+                      selectedCategoryState === item.name
                         ? "lightblue"
                         : "transparent",
                     borderRadius: "50%",

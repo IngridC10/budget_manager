@@ -15,9 +15,8 @@ import PlusIcon from "../icons/PlusIcon";
 import IconsCategoryList from "./IconsCategoryListComponent";
 import CategorySelect from "./CategoryComponent";
 import OwnerExpenses from "./OwnerExpenses";
-import { Card } from "./KanbanBoard";
+import { Card, categoriesMockUp } from "./KanbanBoard";
 // import IconSelect from "./IconsCategoryListComponent";
-
 interface Props {
   task: Card;
   deleteTask: (id: Id) => void;
@@ -49,8 +48,9 @@ function TaskCard({
 }: Props) {
   const [mouseIsOverState, setMouseIsOverState] = useState(false);
   const [editModeState, setEditModeState] = useState(false);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [selectedExpenseType, setSelectedExpenseType] = useState<string>("");
+  const [selectedDateState, setSelectedDateState] = useState<Date | null>(null);
+  const [selectedExpenseTypeState, setSelectedExpenseTypeState] =
+    useState<string>("");
 
   const {
     setNodeRef,
@@ -222,8 +222,8 @@ function TaskCard({
               <div className="flex flex-row items-center justify-between mt-5">
                 <select
                   className="w-full h-10 text-center text-black rounded-lg bg-colorLightBlue"
-                  value={selectedExpenseType}
-                  onChange={(e) => setSelectedExpenseType(e.target.value)}
+                  value={selectedExpenseTypeState}
+                  onChange={(e) => setSelectedExpenseTypeState(e.target.value)}
                 >
                   <option value="">Tipo de gasto</option>
                   <option value="gastos_variables">Gastos Variables</option>
@@ -232,8 +232,8 @@ function TaskCard({
                 </select>
 
                 <DatePicker
-                  selected={selectedDate}
-                  onChange={(date) => setSelectedDate(date)}
+                  selected={selectedDateState}
+                  onChange={(date) => setSelectedDateState(date)}
                   showTimeSelect
                   dateFormat="Pp"
                   className="p-2 ml-2 text-black rounded-lg h-11 w-60 bg-colorLightBlue"
@@ -244,7 +244,7 @@ function TaskCard({
                 <OwnerExpenses />
               </div>
               <div className="flex flex-row items-center justify-center mt-5">
-                <CategorySelect />
+                <CategorySelect categories={categoriesMockUp} />
                 <button
                   onClick={(e) => {
                     e.stopPropagation();

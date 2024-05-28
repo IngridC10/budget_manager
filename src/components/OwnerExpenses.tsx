@@ -8,7 +8,7 @@ interface OptionType {
 }
 
 const OwnerExpenses: React.FC = () => {
-  const [selectedOption, setSelectedOption] =
+  const [selectedOptionState, setSelectedOptionState] =
     useState<SingleValue<OptionType>>(null);
 
   const options: OptionType[] = [
@@ -18,7 +18,7 @@ const OwnerExpenses: React.FC = () => {
   ];
 
   const handleChange = (option: SingleValue<OptionType>) => {
-    setSelectedOption(option);
+    setSelectedOptionState(option);
     console.log(`Option selected:`, option);
   };
 
@@ -49,7 +49,7 @@ const OwnerExpenses: React.FC = () => {
       }}
     >
       <Select
-        value={selectedOption}
+        value={selectedOptionState}
         onChange={handleChange}
         options={options}
         placeholder="Owner Expenses"

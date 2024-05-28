@@ -7,46 +7,39 @@ interface OptionType {
   label: string;
   color: string;
 }
-const CategorySelect: React.FC = () => {
-  const [selectedOption, setSelectedOption] =
+
+interface CategorySelectProps {
+  categories: { id: number; name: string }[];
+}
+
+const CategorySelect: React.FC<CategorySelectProps> = ({ categories }) => {
+  const [selectedOptionState, setSelectedOptionState] =
     useState<SingleValue<OptionType>>(null);
 
-  const options: OptionType[] = [
-    { value: "Salud", label: "Salud", color: "black" },
-    { value: "Ocio", label: "Ocio", color: "black" },
-    { value: "Alimentación", label: "Alimentación", color: "black" },
-    { value: "Café", label: "Café", color: "black" },
-    { value: "Educación", label: "Educación", color: "black" },
-    { value: "Regalos", label: "Regalos", color: "black" },
-    { value: "Familia", label: "Familia", color: "black" },
-    { value: "Belleza", label: "Belleza", color: "black" },
-    { value: "Transporte", label: "Transporte", color: "black" },
-    { value: "Mascota", label: "Mascota", color: "black" },
-    { value: "Vivienda", label: "Vivienda", color: "black" },
-    { value: "Social", label: "Social", color: "black" },
-    { value: "Deporte", label: "Deporte", color: "black" },
-    { value: "Teléfono", label: "Teléfono", color: "black" },
-  ];
+  const options: OptionType[] = categories.map((category) => ({
+    value: category.name,
+    label: category.name,
+    color: "black",
+  }));
 
   const handleChange = (option: SingleValue<OptionType>) => {
-    setSelectedOption(option);
+    setSelectedOptionState(option);
     console.log(`Option selected:`, option);
   };
 
-  // Custom styles for react-select
   const customStyles = {
     option: (provided: any, state: any) => ({
       ...provided,
-      color: state.isSelected ? "white" : "black", // Color for the selected option
-      backgroundColor: state.isSelected ? "#2684FF" : "white", // Background color for the selected option
+      color: state.isSelected ? "white" : "black",
+      backgroundColor: state.isSelected ? "#2684FF" : "white",
       ":active": {
         ...provided[":active"],
-        backgroundColor: state.isSelected ? "#2684FF" : "#f5f5f5", // Background color for the active option
+        backgroundColor: state.isSelected ? "#2684FF" : "#f5f5f5",
       },
     }),
     singleValue: (provided: any) => ({
       ...provided,
-      color: "black", // Color for the selected value in the input box
+      color: "black",
     }),
     placeholder: (provided: any) => ({
       ...provided,
@@ -58,8 +51,7 @@ const CategorySelect: React.FC = () => {
 
   const customPlaceholder = (
     <div style={{ display: "flex", alignItems: "center" }}>
-      <FaHome style={{ marginRight: 8, width: 40, height: 20 }} />{" "}
-      {/* Icono de casa */}
+      <FaHome style={{ marginRight: 8, width: 40, height: 20 }} />
       <span>Selecciona una categoría...</span>
     </div>
   );
@@ -74,12 +66,12 @@ const CategorySelect: React.FC = () => {
       }}
     >
       <Select
-        value={selectedOption}
+        value={selectedOptionState}
         onChange={handleChange}
         options={options}
-        placeholder={customPlaceholder} // Custom placeholder with icon
+        placeholder={customPlaceholder}
         isClearable
-        styles={customStyles} // Apply custom styles here
+        styles={customStyles}
       />
     </div>
   );

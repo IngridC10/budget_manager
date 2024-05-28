@@ -6,7 +6,6 @@ import { useMemo, useState } from "react";
 import PlusIcon from "../icons/PlusIcon";
 import TaskCard from "./TaskCard";
 import { Card } from "./KanbanBoard";
-
 interface Props {
   column: Column;
   deleteColumn: (id: Id) => void;
@@ -38,7 +37,7 @@ const ColumnContainer: React.FC<Props> = ({
   isModalOpenAddCategoryState,
   setIsModalOpenAddCategoryState,
 }) => {
-  const [editMode, setEditMode] = useState(false);
+  const [editModeState, setEditModeState] = useState(false);
 
   const tasksIds = useMemo(() => cards.map((task) => task.id), [cards]);
 
@@ -55,7 +54,7 @@ const ColumnContainer: React.FC<Props> = ({
       type: "Column",
       column,
     },
-    disabled: editMode,
+    disabled: editModeState,
   });
 
   const style = {
@@ -83,23 +82,23 @@ const ColumnContainer: React.FC<Props> = ({
       <div
         {...attributes}
         {...listeners}
-        onClick={() => setEditMode(true)}
+        onClick={() => setEditModeState(true)}
         className="bg-mainBackgroundColor text-md h-[60px] cursor-grab rounded-md rounded-b-none p-3 font-bold border-columnBackgroundColor border-4 flex items-center justify-between"
       >
         <div className="flex gap-2">
           <div className="flex items-center justify-center px-2 py-1 text-sm rounded-full bg-columnBackgroundColor">
             0
           </div>
-          {!editMode && column.title}
-          {editMode && (
+          {!editModeState && column.title}
+          {editModeState && (
             <input
               className="px-2 bg-black border rounded outline-none focus:border-colorLightBlue"
               value={column.title}
               onChange={(e) => updateColumn(column.id, e.target.value)}
               autoFocus
-              onBlur={() => setEditMode(false)}
+              onBlur={() => setEditModeState(false)}
               onKeyDown={(e) => {
-                if (e.key === "Enter") setEditMode(false);
+                if (e.key === "Enter") setEditModeState(false);
               }}
             />
           )}
