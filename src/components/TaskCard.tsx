@@ -15,12 +15,12 @@ import PlusIcon from "../icons/PlusIcon";
 import IconsCategoryList from "./IconsCategoryListComponent";
 import CategorySelect from "./CategoryComponent";
 import OwnerExpenses from "./OwnerExpenses";
-import { Card, categoriesMockUp } from "./KanbanBoard";
-// import IconSelect from "./IconsCategoryListComponent";
+import { Card, expenseMockUp, categoriesMockUp } from "./KanbanBoard";
+
 interface Props {
   task: Card;
   deleteTask: (id: Id) => void;
-  updateTask: (id: Id, content: string) => void;
+  updateTask: (id: Id, card: Card) => void;
   isModalOpenDetailState: boolean;
   setIsModalOpenDetailState: React.Dispatch<React.SetStateAction<boolean>>;
   isModalEditState: boolean;
@@ -48,6 +48,8 @@ function TaskCard({
 }: Props) {
   const [mouseIsOverState, setMouseIsOverState] = useState(false);
   const [editModeState, setEditModeState] = useState(false);
+  const [selectedTask, setSelectedTask] = useState<Card | null>(null);
+  const [expenseAmountState, setExpenseAmountState] = useState(task.expenses);
   const [selectedDateState, setSelectedDateState] = useState<Date | null>(null);
   const [selectedExpenseTypeState, setSelectedExpenseTypeState] =
     useState<string>("");
@@ -61,10 +63,7 @@ function TaskCard({
     isDragging,
   } = useSortable({
     id: task.id,
-    data: {
-      type: "Task",
-      task,
-    },
+    data: { type: "Task", task },
     disabled: editModeState,
   });
 
@@ -81,7 +80,21 @@ function TaskCard({
 
   const handleContentClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+    setSelectedTask(task); // Establecer el task seleccionado
     setIsModalOpenEditState(true);
+  };
+
+  const handleSave = () => {
+    const newCard = {
+      ...task,
+      expenses: expenseAmountState,
+      title: task.title,
+      content: task.content,
+      date: selectedDateState,
+      category: selectedExpenseTypeState,
+    };
+    updateTask(task.id, newCard);
+    setIsModalOpenEditState(false);
   };
 
   if (isDragging) {
@@ -121,7 +134,7 @@ function TaskCard({
               toggleEditMode();
             }
           }}
-          onChange={(e) => updateTask(task.id, e.target.value)}
+          onChange={(e) => (task.content = e.target.value)}
         />
       ) : (
         <div className="flex justify-between w-full">
@@ -138,6 +151,7 @@ function TaskCard({
               <button
                 onClick={(e) => {
                   e.stopPropagation();
+                  setSelectedTask(task); // Establecer el task seleccionado
                   toggleEditMode();
                   setIsModalOpenEditState(true);
                 }}
@@ -197,7 +211,7 @@ function TaskCard({
         />
       )}
 
-      {isModalOpenEditState && (
+      {isModalOpenEditState && selectedTask && (
         <ModalComponent
           onClose={() => setIsModalOpenEditState(false)}
           content={
@@ -212,11 +226,19 @@ function TaskCard({
                 type="text"
                 id="monto"
                 className="w-full h-12 px-4 text-black border rounded-lg w-70 border-blueColor"
+                value={`${expenseAmountState}`}
                 placeholder="Digite el monto..."
+                onChange={(e) => {
+                  if (e.target.value === "") {
+                    setExpenseAmountState(0);
+                  } else {
+                    setExpenseAmountState(parseInt(e.target.value));
+                  }
+                }}
               />
 
               <div className="flex items-center justify-center w-full h-12 mt-2 rounded-lg bg-blueColor">
-                <h1>Gastos Personales</h1>
+                <h1>{selectedTask.title}</h1>
               </div>
 
               <div className="flex flex-row items-center justify-between mt-5">
@@ -226,11 +248,12 @@ function TaskCard({
                   onChange={(e) => setSelectedExpenseTypeState(e.target.value)}
                 >
                   <option value="">Tipo de gasto</option>
-                  <option value="gastos_variables">Gastos Variables</option>
-                  <option value="gastos_fijos">Gastos Fijos</option>
-                  <option value="gastos_recurrentes">Gastos Recurrentes</option>
+                  {expenseMockUp.map((expense) => (
+                    <option key={expense.id} value={expense.id}>
+                      {expense.name}
+                    </option>
+                  ))}
                 </select>
-
                 <DatePicker
                   selected={selectedDateState}
                   onChange={(date) => setSelectedDateState(date)}
@@ -250,13 +273,17 @@ function TaskCard({
                     e.stopPropagation();
                     setModalOpenAddCategoryState(true);
                   }}
+                  onSelect={() => {}} // TODO set selectState
                   className="h-10 gap-2 ml-4 text-black"
                 >
                   <PlusIcon />
                 </button>
               </div>
 
-              <button className="flex items-center justify-center w-40 h-10 mt-20 rounded-lg ml-52 bg-blueColor">
+              <button
+                className="flex items-center justify-center w-40 h-10 mt-20 rounded-lg ml-52 bg-blueColor"
+                onClick={handleSave}
+              >
                 <h1 className="text-white">Guardar</h1>
               </button>
             </div>

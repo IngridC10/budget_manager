@@ -5,7 +5,7 @@
 html,
 body,
 #root {
-  @apply bg-black text-white box-border;
+  @apply box-border text-white bg-black;
 }
 
 ::-webkit-scrollbar {
@@ -22,4 +22,8 @@ body,
 
 .task > ::-webkit-scrollbar-thumb {
   @apply bg-sky-500 rounded-xl;
+}
+
+.css-kmnzss {
+  margin-bottom: 0px;
 }

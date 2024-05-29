@@ -11,7 +11,7 @@ interface Props {
   deleteColumn: (id: Id) => void;
   updateColumn: (id: Id, title: string) => void;
   createTask: (columnId: Id) => void;
-  updateTask: (id: Id, content: string) => void;
+  updateTask: (id: Id, card: Card) => void;
   deleteTask: (id: Id) => void;
   cards: Card[];
   isModalOpenDetailState: boolean;

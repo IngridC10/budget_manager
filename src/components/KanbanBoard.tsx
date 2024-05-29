@@ -43,7 +43,7 @@ export class Card {
   }
 }
 
-const cardListMockUp = [
+export const cardListMockUp = [
   new Card({
     id: 0,
     title: "Gastos de Viajes",
@@ -76,7 +76,7 @@ const getCardJSON = JSON.stringify(cardListMockUp, null, 2);
 
 console.log(getCardJSON);
 
-class Columns {
+export class Columns {
   id: number;
   title: string;
   position: number;
@@ -87,7 +87,7 @@ class Columns {
   }
 }
 
-const columnsMockUp = [
+export const columnsMockUp = [
   new Columns({
     id: 0,
     title: "Viajes",
@@ -151,7 +151,7 @@ export const categoriesMockUp = [
   }),
 ];
 
-class TypeExpense {
+export class TypeExpense {
   id: number;
   name: String;
   constructor(categoriesData: { id: number; name: String }) {
@@ -160,20 +160,20 @@ class TypeExpense {
   }
 }
 
-const expenseMockUp = [
+export const expenseMockUp = [
   new TypeExpense({
     id: 0,
-    name: "Gasto",
+    name: "Gasto Variable",
   }),
 
   new TypeExpense({
     id: 1,
-    name: "Ingreso",
+    name: "Gasto Fijo",
   }),
 
   new TypeExpense({
     id: 2,
-    name: "Ahorro",
+    name: "Gasto Recurrente",
   }),
 ];
 
@@ -186,8 +186,7 @@ const KanbanBoard: React.FC = () => {
   const [isModalOpenEditState, setIsModalOpenEditState] =
     useState<boolean>(false);
   const [columnsState, setColumnsState] = useState<Column[]>(columnsMockUp);
-  const [categoriesState, setCategoriesState] =
-    useState<Categories[]>(categoriesMockUp);
+
   const columnsId = useMemo(
     () => columnsState.map((col) => col.id),
     [columnsState]
@@ -275,7 +274,7 @@ const KanbanBoard: React.FC = () => {
               createTask={createTask}
               deleteTask={deleteTask}
               updateTask={updateTask}
-              cards={cardListMockUp.filter(
+              cards={cardsState.filter(
                 (card) => card.columnId === activeColumnState.id
               )}
             />
@@ -324,13 +323,32 @@ const KanbanBoard: React.FC = () => {
     setCardsState(newTasks);
   }
 
-  function updateTask(id: Id, content: string) {
+  function updateTask(id: Id, card: Card) {
+    console.log("Updating task", id);
     const newTasks = cardsState.map((task) => {
       if (task.id !== id) return task;
-      return { ...task, content };
+
+      // Actualizar solo los campos que no son undefined
+      const updatedTask = { ...task };
+
+      updatedTask.title = card.title;
+      updatedTask.category = card.category;
+      updatedTask.income = card.income;
+      updatedTask.expenses = card.expenses;
+      updatedTask.content = card.content;
+
+      // if (content !== undefined) {
+      //   updatedTask.content = content;
+      // }
+      // if (expenses !== undefined) {
+      //   updatedTask.expenses = expenses;
+      // }
+
+      return updatedTask;
     });
 
     setCardsState(newTasks);
+    console.log("New tasks", cardsState);
   }
 
   function createNewColumn() {
