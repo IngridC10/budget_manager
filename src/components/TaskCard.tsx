@@ -13,9 +13,11 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import PlusIcon from "../icons/PlusIcon";
 import IconsCategoryList from "./IconsCategoryListComponent";
-import CategorySelect from "./CategoryComponent";
+import CategorySelect, { OptionType } from "./CategoryComponent";
 import OwnerExpenses from "./OwnerExpenses";
 import { Card, expenseMockUp, categoriesMockUp } from "./KanbanBoard";
+
+// import { de } from "date-fns/locale";
 
 interface Props {
   task: Card;
@@ -46,14 +48,32 @@ function TaskCard({
   isModalOpenEditState,
   setIsModalOpenEditState,
 }: Props) {
+  // Se utiliza para rastrear si el mouse está sobre un componente en especīfico.
   const [mouseIsOverState, setMouseIsOverState] = useState(false);
+
+  // Rastrea si el componente está en modo de edición.
   const [editModeState, setEditModeState] = useState(false);
+
+  // Rastrea el task seleccionado.
   const [selectedTask, setSelectedTask] = useState<Card | null>(null);
+
+  // Rastrea los gastos asociados con una tarea y actualiza la interfaz de usuario
   const [expenseAmountState, setExpenseAmountState] = useState(task.expenses);
+
+  // Rastrea la fecha seleccionada y actualiza la interfaz de usuario
+
   const [selectedDateState, setSelectedDateState] = useState<Date | null>(null);
+
+  // Selecciona el tipo de gasto y actualiza la interfaz de usuario
+
   const [selectedExpenseTypeState, setSelectedExpenseTypeState] =
     useState<string>("");
 
+  // Selecciona la categoría
+  const [selectedCategoryState, setSelectedCategoryState] =
+    useState<OptionType | null>(null);
+  // Se utiliza para hacer que un elemento pueda ser reordenado mediante operaciones de
+  // arrastrar y soltar
   const {
     setNodeRef,
     attributes,
@@ -73,17 +93,21 @@ function TaskCard({
     boxShadow: isSelected ? "0 0 10px #000" : "none",
   };
 
+  // Cambia el estado de editModeState
+
   const toggleEditMode = () => {
     setEditModeState((prev) => !prev);
     setMouseIsOverState(false);
   };
 
+  // Se activa cuando se hace click en un contenido específico
   const handleContentClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     setSelectedTask(task); // Establecer el task seleccionado
     setIsModalOpenEditState(true);
   };
 
+  // Se utiliza para actualizar una tarea existente con los nuevos valores y luego cierra el modal de edición
   const handleSave = () => {
     const newCard = {
       ...task,
@@ -91,11 +115,14 @@ function TaskCard({
       title: task.title,
       content: task.content,
       date: selectedDateState,
-      category: selectedExpenseTypeState,
+      category: selectedCategoryState?.value || "",
     };
     updateTask(task.id, newCard);
     setIsModalOpenEditState(false);
+    console.log("me devuelve", newCard);
   };
+
+  // Maneja el comportamiento de arrastrar y soltar
 
   if (isDragging) {
     return (
@@ -267,7 +294,11 @@ function TaskCard({
                 <OwnerExpenses />
               </div>
               <div className="flex flex-row items-center justify-center mt-5">
-                <CategorySelect categories={categoriesMockUp} />
+                <CategorySelect
+                  categories={categoriesMockUp}
+                  selectedCategoryState={selectedCategoryState}
+                  setSelectedCategoryState={setSelectedCategoryState}
+                />
                 <button
                   onClick={(e) => {
                     e.stopPropagation();

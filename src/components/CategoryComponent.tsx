@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Select, { SingleValue } from "react-select";
 import { FaHome } from "react-icons/fa";
 
-interface OptionType {
+export interface OptionType {
   value: string;
   label: string;
   color: string;
@@ -10,12 +10,17 @@ interface OptionType {
 
 interface CategorySelectProps {
   categories: { id: number; name: string }[];
+  selectedCategoryState: SingleValue<OptionType>;
+  setSelectedCategoryState: React.Dispatch<
+    React.SetStateAction<SingleValue<OptionType>>
+  >;
 }
 
-const CategorySelect: React.FC<CategorySelectProps> = ({ categories }) => {
-  const [selectedOptionState, setSelectedOptionState] =
-    useState<SingleValue<OptionType>>(null);
-
+const CategorySelect: React.FC<CategorySelectProps> = ({
+  categories,
+  selectedCategoryState,
+  setSelectedCategoryState,
+}) => {
   const options: OptionType[] = categories.map((category) => ({
     value: category.name,
     label: category.name,
@@ -23,7 +28,7 @@ const CategorySelect: React.FC<CategorySelectProps> = ({ categories }) => {
   }));
 
   const handleChange = (option: SingleValue<OptionType>) => {
-    setSelectedOptionState(option);
+    setSelectedCategoryState(option);
     console.log(`Option selected:`, option);
   };
 
@@ -66,7 +71,7 @@ const CategorySelect: React.FC<CategorySelectProps> = ({ categories }) => {
       }}
     >
       <Select
-        value={selectedOptionState}
+        value={selectedCategoryState}
         onChange={handleChange}
         options={options}
         placeholder={customPlaceholder}

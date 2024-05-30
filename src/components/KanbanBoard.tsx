@@ -15,6 +15,8 @@ import {
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { createPortal } from "react-dom";
 import TaskCard from "./TaskCard";
+import { set } from "date-fns";
+import { se } from "date-fns/locale";
 
 export class Card {
   id: Id;
@@ -178,24 +180,39 @@ export const expenseMockUp = [
 ];
 
 const KanbanBoard: React.FC = () => {
+  // Almacena el estado de la visibilidad del modal de detalle
   const [isModalOpenDetailState, setIsModalOpenDetailState] =
     useState<boolean>(false);
+
+  // Almacena el estado de visibilidad del modal para añadir categoría
   const [isModalOpenAddCategoryState, setIsModalOpenAddCategoryState] =
     useState<boolean>(false);
 
+  // Almacena el estado de la visibilidad del modal de edicion en el tablero
   const [isModalOpenEditState, setIsModalOpenEditState] =
     useState<boolean>(false);
+
+  // Almacena el estado actual de las columnas y se actualiza el nuevo valor
   const [columnsState, setColumnsState] = useState<Column[]>(columnsMockUp);
 
+  // Se utiliza para memorizar el resultado de que una operación crea un nuevo array con  los Id de todas las columnas
   const columnsId = useMemo(
     () => columnsState.map((col) => col.id),
     [columnsState]
   );
+
+  // almacena el estado de los cards y se actualiza un nuevo valor con el setCardsState
   const [cardsState, setCardsState] = useState<Card[]>(cardListMockUp);
+
+  // almacena el estado actual de la columna activa y se actualiza con setActiveColumnState
   const [activeColumnState, setActiveColumnState] = useState<Column | null>(
     null
   );
+
+  // almacena el estado actual del card y se actualiza con un nuevo valor con setActiveCardState
   const [activeCardState, setActiveCardState] = useState<Card | null>(null);
+
+  // Registra los sensores para iniciar la operación de arrastrar y soltar
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
@@ -204,6 +221,7 @@ const KanbanBoard: React.FC = () => {
     })
   );
   return (
+    // Registra los sensores que inician la operación de arrastrar y soltar
     <DndContext
       sensors={sensors}
       onDragStart={onDragStart}
@@ -212,6 +230,8 @@ const KanbanBoard: React.FC = () => {
     >
       <div className="flex gap-4 m-auto">
         <div className="flex gap-4 ">
+          {/* 
+          Se mapea el estado de las columnas para renderizar un componente para cada columna */}
           <SortableContext items={columnsId}>
             {columnsState.map((col) => (
               <ColumnContainer
@@ -302,6 +322,7 @@ const KanbanBoard: React.FC = () => {
     </DndContext>
   );
 
+  // Esta función sirve para crear una nueva tarea o card en una columna específica
   function createTask(columnId: Id) {
     console.log("Creating task in column", columnId);
     const newTask: Card = {
@@ -312,23 +333,23 @@ const KanbanBoard: React.FC = () => {
       category: "",
       income: 0,
       expenses: 0,
-      // content: `Task ${tasks.length + 1}`,
     };
 
     setCardsState([...cardsState, newTask]);
   }
-
+  // Se utiliza para eliminar una tarea del estado de los cards
   function deleteTask(id: Id) {
     const newTasks = cardsState.filter((task) => task.id !== id);
     setCardsState(newTasks);
   }
 
+  // Se utiliza para actualizar una tarea especifica en el estado de los cards
   function updateTask(id: Id, card: Card) {
     console.log("Updating task", id);
     const newTasks = cardsState.map((task) => {
       if (task.id !== id) return task;
 
-      // Actualizar solo los campos que no son undefined
+      // copia todas las propiedades del objeto task en un nuevo objeto  llamado updatedTask
       const updatedTask = { ...task };
 
       updatedTask.title = card.title;
@@ -347,10 +368,12 @@ const KanbanBoard: React.FC = () => {
       return updatedTask;
     });
 
+    // Se utiliza para actualizar el estado de las tarjetas
     setCardsState(newTasks);
     console.log("New tasks", cardsState);
   }
 
+  // Esta función crea una nueva columna en el tablero
   function createNewColumn() {
     const columnToAdd: Column = {
       id: generateId(),
@@ -360,6 +383,7 @@ const KanbanBoard: React.FC = () => {
     setColumnsState([...columnsState, columnToAdd]);
   }
 
+  // Elimina una columna específica del tablero
   function deleteColumn(id: Id) {
     const filteredColumns = columnsState.filter((col) => col.id !== id);
     setColumnsState(filteredColumns);
@@ -368,15 +392,18 @@ const KanbanBoard: React.FC = () => {
     setCardsState(newTasks);
   }
 
+  // Actualiza el título de una columna en especifíco
   function updateColumn(id: Id, title: string) {
     const newColumns = columnsState.map((col) => {
       if (col.id !== id) return col;
       return { ...col, title };
     });
 
+    // Actualiza el estado de las columnas
     setColumnsState(newColumns);
   }
 
+  // Maneja el inicio de una operación de arrastrar y soltar el tablero
   function onDragStart(event: DragStartEvent) {
     if (event.active.data.current?.type === "Column") {
       setActiveColumnState(event.active.data.current.column);
@@ -388,7 +415,7 @@ const KanbanBoard: React.FC = () => {
       return;
     }
   }
-
+  // Se utiliza para manejar el final de una operación de arrastrar y soltar en el tablero
   function onDragEnd(event: DragEndEvent) {
     setActiveColumnState(null);
     setActiveCardState(null);
@@ -406,6 +433,7 @@ const KanbanBoard: React.FC = () => {
 
     console.log("DRAG END");
 
+    // Actualiza el estado de las columnas en el tablero
     setColumnsState((columns) => {
       const activeColumnIndex = columns.findIndex((col) => col.id === activeId);
 
@@ -414,6 +442,8 @@ const KanbanBoard: React.FC = () => {
       return arrayMove(columns, activeColumnIndex, overColumnIndex);
     });
   }
+
+  // Esta función se activa cuando un elemento arrastrado se mueve sobre otro elemento
 
   function onDragOver(event: DragOverEvent) {
     const { active, over } = event;
@@ -429,14 +459,13 @@ const KanbanBoard: React.FC = () => {
 
     if (!isActiveATask) return;
 
-    // Im dropping a Task over another Task
+    // Suelta la tarea sobre otra tarea
     if (isActiveATask && isOverATask) {
       setCardsState((tasks) => {
         const activeIndex = tasks.findIndex((t) => t.id === activeId);
         const overIndex = tasks.findIndex((t) => t.id === overId);
 
         if (tasks[activeIndex].columnId != tasks[overIndex].columnId) {
-          // Fix introduced after video recording
           tasks[activeIndex].columnId = tasks[overIndex].columnId;
           return arrayMove(tasks, activeIndex, overIndex - 1);
         }
@@ -447,7 +476,7 @@ const KanbanBoard: React.FC = () => {
 
     const isOverAColumn = over.data.current?.type === "Column";
 
-    // Im dropping a Task over a column
+    //Actualiza los estados de la tarjeta en el card
     if (isActiveATask && isOverAColumn) {
       setCardsState((tasks) => {
         const activeIndex = tasks.findIndex((t) => t.id === activeId);
@@ -460,8 +489,9 @@ const KanbanBoard: React.FC = () => {
   }
 };
 
+// Genera un número aleatorio, este número puede ser utilizado como un identificador único
+
 function generateId() {
-  /* Generate a random number between 0 and 10000 */
   return Math.floor(Math.random() * 10001);
 }
 

@@ -55,6 +55,8 @@ const categories = [
 const IconsCategoryList = () => {
   const [selectedCategoryState, setSelectedCategoryState] =
     useState<string>("");
+
+  // Actualiza el estado selectedCategoryState con la categoría seleccionada
   const handleSelectCategory = (category: string) => {
     setSelectedCategoryState(category);
     console.log(`Categoría seleccionada: ${category}`);
