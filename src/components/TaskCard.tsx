@@ -15,7 +15,14 @@ import PlusIcon from "../icons/PlusIcon";
 import IconsCategoryList from "./IconsCategoryListComponent";
 import CategorySelect, { OptionType } from "./CategoryComponent";
 import OwnerExpenses from "./OwnerExpenses";
-import { Card, expenseMockUp, categoriesMockUp } from "./KanbanBoard";
+import {
+  Card,
+  expenseMockUp,
+  categoriesMockUp,
+  Categories,
+} from "./KanbanBoard";
+// import { BsTypeH3 } from "react-icons/bs";
+// import { DiTypo3 } from "react-icons/di";
 
 // import { de } from "date-fns/locale";
 
@@ -33,6 +40,8 @@ interface Props {
   setModalOpenAddCategoryState: React.Dispatch<React.SetStateAction<boolean>>;
   isModalOpenAddCategoryState: boolean;
   onSelect: () => void;
+  createCategory: (category: string) => void;
+  categoryListState: Categories[];
 }
 
 function TaskCard({
@@ -47,7 +56,14 @@ function TaskCard({
   setModalOpenAddCategoryState,
   isModalOpenEditState,
   setIsModalOpenEditState,
+  categoryListState,
+  createCategory,
 }: Props) {
+  console.log("category list", categoryListState);
+  if (categoryListState == undefined) {
+    categoryListState = categoriesMockUp;
+  }
+  console.log("category list 2222", categoryListState);
   // Se utiliza para rastrear si el mouse está sobre un componente en especīfico.
   const [mouseIsOverState, setMouseIsOverState] = useState(false);
 
@@ -62,7 +78,7 @@ function TaskCard({
 
   // Rastrea la fecha seleccionada y actualiza la interfaz de usuario
 
-  const [selectedDateState, setSelectedDateState] = useState<Date | null>(null);
+  const [selectedDateState, setSelectedDateState] = useState<Date>(new Date());
 
   // Selecciona el tipo de gasto y actualiza la interfaz de usuario
 
@@ -72,8 +88,12 @@ function TaskCard({
   // Selecciona la categoría
   const [selectedCategoryState, setSelectedCategoryState] =
     useState<OptionType | null>(null);
+
+  const [selectedOwnerState, setSelectedOwnerState] =
+    useState<OptionType | null>(null);
   // Se utiliza para hacer que un elemento pueda ser reordenado mediante operaciones de
   // arrastrar y soltar
+
   const {
     setNodeRef,
     attributes,
@@ -116,10 +136,12 @@ function TaskCard({
       content: task.content,
       date: selectedDateState,
       category: selectedCategoryState?.value || "",
+      typeExpense: selectedExpenseTypeState,
+      ownerExpense: selectedOwnerState?.value || "",
     };
     updateTask(task.id, newCard);
     setIsModalOpenEditState(false);
-    console.log("me devuelve", newCard);
+    console.log("me devuelveeeee", newCard);
   };
 
   // Maneja el comportamiento de arrastrar y soltar
@@ -222,7 +244,7 @@ function TaskCard({
                 <i className="text-black fas fa-home"></i>
               </span>
               <div className="flex items-center justify-center w-full h-12 mt-5">
-                <h1 className="text-[60px] font-bold text-blueColor">S/400</h1>
+                <h1 className="text-[60px] font-bold text-blueColor">S/500</h1>
               </div>
               <h2 className="mt-6 text-lg font-bold text-black">
                 Gastos personales - Seguro de salud
@@ -231,7 +253,7 @@ function TaskCard({
                 Responsable: Ingrid Calzada
               </h3>
               <h3 className="mt-6 text-lg font-bold text-black">
-                Vence el: 10 de junio
+                Vence el: 31 de mayo
               </h3>
             </div>
           }
@@ -283,19 +305,25 @@ function TaskCard({
                 </select>
                 <DatePicker
                   selected={selectedDateState}
-                  onChange={(date) => setSelectedDateState(date)}
-                  showTimeSelect
+                  onChange={(date) => {
+                    if (date !== null) {
+                      setSelectedDateState(date);
+                    }
+                  }}
                   dateFormat="Pp"
                   className="p-2 ml-2 text-black rounded-lg h-11 w-60 bg-colorLightBlue"
                 />
               </div>
 
               <div className="mt-5">
-                <OwnerExpenses />
+                <OwnerExpenses
+                  selectedOwnerState={selectedOwnerState}
+                  setSelectedOwnerState={setSelectedOwnerState}
+                />
               </div>
               <div className="flex flex-row items-center justify-center mt-5">
                 <CategorySelect
-                  categories={categoriesMockUp}
+                  categories={categoryListState}
                   selectedCategoryState={selectedCategoryState}
                   setSelectedCategoryState={setSelectedCategoryState}
                 />

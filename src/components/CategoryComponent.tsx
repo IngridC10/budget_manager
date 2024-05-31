@@ -21,6 +21,7 @@ const CategorySelect: React.FC<CategorySelectProps> = ({
   selectedCategoryState,
   setSelectedCategoryState,
 }) => {
+  console.log("Categories 00000:", categories);
   const options: OptionType[] = categories.map((category) => ({
     value: category.name,
     label: category.name,

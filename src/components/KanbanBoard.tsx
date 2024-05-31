@@ -15,8 +15,10 @@ import {
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { createPortal } from "react-dom";
 import TaskCard from "./TaskCard";
-import { set } from "date-fns";
-import { se } from "date-fns/locale";
+import { Category } from "@mui/icons-material";
+import { id } from "date-fns/locale";
+// import { set } from "date-fns";
+// import { se } from "date-fns/locale";
 
 export class Card {
   id: Id;
@@ -26,6 +28,8 @@ export class Card {
   expenses: number;
   columnId: Id;
   content: string;
+  ownerExpense: string;
+  date: Date;
   constructor(cardData: {
     id: Id;
     title: string;
@@ -34,6 +38,8 @@ export class Card {
     expenses: number;
     columnId: Id;
     content: string;
+    ownerExpense: string;
+    date: Date;
   }) {
     this.id = cardData.id;
     this.title = cardData.title;
@@ -42,6 +48,8 @@ export class Card {
     this.expenses = cardData.expenses;
     this.columnId = cardData.columnId;
     this.content = cardData.content;
+    this.ownerExpense = cardData.ownerExpense;
+    this.date = cardData.date;
   }
 }
 
@@ -54,6 +62,8 @@ export const cardListMockUp = [
     expenses: 500,
     columnId: 0,
     content: "Gastos de Viajes",
+    ownerExpense: "@ingridCalzada",
+    date: new Date(),
   }),
   new Card({
     id: 1,
@@ -63,6 +73,8 @@ export const cardListMockUp = [
     expenses: 400,
     columnId: 1,
     content: "Gastos de Transporte",
+    ownerExpense: "@ingridCalzada",
+    date: new Date(),
   }),
   new Card({
     id: 2,
@@ -72,6 +84,8 @@ export const cardListMockUp = [
     expenses: 1000,
     columnId: 2,
     content: "Gastos en Salud",
+    ownerExpense: "@ingridCalzada",
+    date: new Date(),
   }),
 ];
 const getCardJSON = JSON.stringify(cardListMockUp, null, 2);
@@ -204,6 +218,9 @@ const KanbanBoard: React.FC = () => {
   // almacena el estado de los cards y se actualiza un nuevo valor con el setCardsState
   const [cardsState, setCardsState] = useState<Card[]>(cardListMockUp);
 
+  const [categoryListState, setCategoryListState] =
+    useState<Categories[]>(categoriesMockUp);
+  console.log("CategoryListState", categoryListState);
   // almacena el estado actual de la columna activa y se actualiza con setActiveColumnState
   const [activeColumnState, setActiveColumnState] = useState<Column | null>(
     null
@@ -211,6 +228,16 @@ const KanbanBoard: React.FC = () => {
 
   // almacena el estado actual del card y se actualiza con un nuevo valor con setActiveCardState
   const [activeCardState, setActiveCardState] = useState<Card | null>(null);
+
+  // const [categoryListState, setCategoryListState] = useState<OptionType[]>([]);
+
+  //  export function createCategory() {
+  //     console.log("Creating a new category");
+  //     const newCategory: Categories = {
+  //       id: generateId(),
+  //       name: "",
+  //       // Inicializa aquí cualquier otra propiedad que necesites en tu categoría
+  //     };
 
   // Registra los sensores para iniciar la operación de arrastrar y soltar
   const sensors = useSensors(
@@ -220,6 +247,7 @@ const KanbanBoard: React.FC = () => {
       },
     })
   );
+  console.log("CategoryListState 2222", categoryListState);
   return (
     // Registra los sensores que inician la operación de arrastrar y soltar
     <DndContext
@@ -314,6 +342,8 @@ const KanbanBoard: React.FC = () => {
               task={activeCardState}
               deleteTask={deleteTask}
               updateTask={updateTask}
+              categoryListState={categoryListState}
+              createCategory={createCategory}
             />
           )}
         </DragOverlay>,
@@ -333,10 +363,21 @@ const KanbanBoard: React.FC = () => {
       category: "",
       income: 0,
       expenses: 0,
+      ownerExpense: "",
+      date: new Date(),
     };
 
     setCardsState([...cardsState, newTask]);
   }
+
+  //  export function createCategory() {
+  //     console.log("Creating a new category");
+  //     const newCategory: Categories = {
+  //       id: generateId(),
+  //       name: "",
+  //       // Inicializa aquí cualquier otra propiedad que necesites en tu categoría
+  //     };
+
   // Se utiliza para eliminar una tarea del estado de los cards
   function deleteTask(id: Id) {
     const newTasks = cardsState.filter((task) => task.id !== id);
@@ -357,6 +398,7 @@ const KanbanBoard: React.FC = () => {
       updatedTask.income = card.income;
       updatedTask.expenses = card.expenses;
       updatedTask.content = card.content;
+      updatedTask.ownerExpense = card.ownerExpense;
 
       // if (content !== undefined) {
       //   updatedTask.content = content;
@@ -381,6 +423,16 @@ const KanbanBoard: React.FC = () => {
     };
 
     setColumnsState([...columnsState, columnToAdd]);
+  }
+
+  function createCategory(name: string) {
+    console.log("Creating a new category");
+    const newCategory: Categories = {
+      id: generateId(),
+      name: name,
+      // Inicializa aquí cualquier otra propiedad que necesites en tu categoría
+    };
+    setCategoryListState([...categoryListState, newCategory]);
   }
 
   // Elimina una columna específica del tablero

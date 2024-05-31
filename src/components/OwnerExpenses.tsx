@@ -7,18 +7,28 @@ interface OptionType {
   color: string;
 }
 
-const OwnerExpenses: React.FC = () => {
-  const [selectedOptionState, setSelectedOptionState] =
-    useState<SingleValue<OptionType>>(null);
+interface OwnerExpensesProps {
+  selectedOwnerState: SingleValue<OptionType>;
+  setSelectedOwnerState: React.Dispatch<
+    React.SetStateAction<SingleValue<OptionType>>
+  >;
+}
+
+const OwnerExpenses: React.FC<OwnerExpensesProps> = ({
+  selectedOwnerState,
+  setSelectedOwnerState,
+}) => {
+  // const [selectedOptionState, setSelectedOptionState] =
+  //   useState<SingleValue<OptionType>>(null);
 
   const options: OptionType[] = [
     { value: "@ingridCalzada", label: "@ingridCalzada", color: "black" },
-    { value: "@ingridCalzada", label: "@ingridCalzada", color: "black" },
-    { value: "@ingridCalzada", label: "@ingridCalzada", color: "black" },
+    { value: "@harolCalzada", label: "@harolCalzada", color: "black" },
+    { value: "@valerieMeza", label: "@valerieMeza", color: "black" },
   ];
 
   const handleChange = (option: SingleValue<OptionType>) => {
-    setSelectedOptionState(option);
+    setSelectedOwnerState(option);
     console.log(`Option selected:`, option);
   };
 
@@ -49,7 +59,7 @@ const OwnerExpenses: React.FC = () => {
       }}
     >
       <Select
-        value={selectedOptionState}
+        value={selectedOwnerState}
         onChange={handleChange}
         options={options}
         placeholder="Owner Expenses"
