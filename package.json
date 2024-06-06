@@ -2,6 +2,9 @@
   "name": "budget_manager",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "21.x"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -11,7 +14,9 @@
   "dependencies": {
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.2.3"
+    "next": "14.2.3",
+    "@dnd-kit/core": "^6.0.8",
+    "@dnd-kit/sortable": "^7.0.2"
   },
   "devDependencies": {
     "typescript": "^5",
