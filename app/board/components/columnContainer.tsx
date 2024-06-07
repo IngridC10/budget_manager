@@ -1,7 +1,8 @@
-'use client';
+"use client";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import TrashIcon from "@/public/assets/icons/TrashIcon";
-import { Column, Id, Task } from "@/types/domain";
+import { Id } from "@/types/domain";
+import { Column, Task } from "../domain/models";
 import { CSS } from "@dnd-kit/utilities";
 import { useMemo, useState } from "react";
 import PlusIcon from "@/public/assets/icons/PlusIcon";
@@ -60,10 +61,10 @@ function ColumnContainer({
         ref={setNodeRef}
         style={style}
         className="
-      bg-columnBackgroundColor
+      bg-customBlue
       opacity-40
       border-2
-      border-pink-500
+      border-customBlue
       w-[350px]
       h-[500px]
       max-h-[500px]
@@ -80,7 +81,7 @@ function ColumnContainer({
       ref={setNodeRef}
       style={style}
       className="
-  bg-columnBackgroundColor
+  bg-customBlue
   w-[350px]
   h-[500px]
   max-h-[500px]
@@ -113,24 +114,13 @@ function ColumnContainer({
       "
       >
         <div className="flex gap-2">
-          <div
-            className="
-        flex
-        justify-center
-        items-center
-        bg-columnBackgroundColor
-        px-2
-        py-1
-        text-sm
-        rounded-full
-        "
-          >
+          <div className="flex items-center justify-center px-2 py-1 text-sm rounded-full bg-columnBackgroundColor">
             0
           </div>
           {!editMode && column.title}
           {editMode && (
             <input
-              className="bg-black focus:border-rose-500 border rounded outline-none px-2"
+              className="px-2 bg-black border rounded outline-none focus:border-blue-500"
               value={column.title}
               onChange={(e) => updateColumn(column.id, e.target.value)}
               autoFocus
@@ -148,21 +138,14 @@ function ColumnContainer({
           onClick={() => {
             deleteColumn(column.id);
           }}
-          className="
-        stroke-gray-500
-        hover:stroke-white
-        hover:bg-columnBackgroundColor
-        rounded
-        px-1
-        py-2
-        "
+          className="px-1 py-2 rounded stroke-gray-500 hover:stroke-white hover:bg-columnBackgroundColor"
         >
           <TrashIcon />
         </button>
       </div>
 
       {/* Column task container */}
-      <div className="flex flex-grow flex-col gap-4 p-2 overflow-x-hidden overflow-y-auto">
+      <div className="flex flex-col flex-grow gap-4 p-2 overflow-x-hidden overflow-y-auto">
         <SortableContext items={tasksIds}>
           {tasks.map((task) => (
             <TaskCard
@@ -176,12 +159,12 @@ function ColumnContainer({
       </div>
       {/* Column footer */}
       <button
-        className="flex gap-2 items-center border-columnBackgroundColor border-2 rounded-md p-4 border-x-columnBackgroundColor hover:bg-mainBackgroundColor hover:text-rose-500 active:bg-black"
+        className="flex items-center gap-2 p-4 border-2 rounded-md border-columnBackgroundColor border-x-columnBackgroundColor hover:bg-mainBackgroundColor hover:text-colorLightBlue active:bg-black"
         onClick={() => {
           createTask(column.id);
         }}
       >
-        <PlusIcon className="h-6 w-6"/>
+        <PlusIcon className="w-6 h-6" />
         Add task
       </button>
     </div>

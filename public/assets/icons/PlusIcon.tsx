@@ -1,4 +1,4 @@
-function PlusIcon({ className, ...props }: PlusIconProps) {
+function PlusIcon({ className, ...props }: SVGIconProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -8,7 +8,6 @@ function PlusIcon({ className, ...props }: PlusIconProps) {
       stroke="currentColor"
       className={className}
       {...props}
-
     >
       <path
         strokeLinecap="round"

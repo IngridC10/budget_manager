@@ -1,3 +1,3 @@
-interface PlusIconProps extends React.SVGProps<SVGSVGElement> {
-    className?: string;
+interface SVGIconProps extends React.SVGProps<SVGSVGElement> {
+  className?: string;
 }
