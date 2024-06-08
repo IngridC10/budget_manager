@@ -8,7 +8,7 @@ export default function Home() {
     <div className="flex items-center justify-center h-screen bg-white">
       <div className="w-[570px] h-[570px]  p-14 bg-colorLightBlue rounded-xl shadow-lg">
         <h1 className="mb-4 text-[25px] m-5 font-bold text-center text-gray-700">
-          Login
+          My Account
         </h1>
         <form>
           <div className="mb-4">
