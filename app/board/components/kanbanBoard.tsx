@@ -129,7 +129,6 @@ function KanbanBoard() {
   return (
     <div className="m-auto p-4 flex flex-col  min-h-screen w-full items-center overflow-x-auto overflow-y-hidden px-[40px] bg-colorLightBlue">
       <h1 className="flex font-bold  items-center text-black text-3xl">
-        {" "}
         Budget Manager
       </h1>
       <DndContext
