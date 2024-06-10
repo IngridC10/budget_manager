@@ -1,3 +1,4 @@
+'use client';
 import { useEffect, useState } from "react";
 import TrashIcon from "@/public/assets/icons/TrashIcon";
 import { Id } from "@/types/domain";
@@ -25,7 +26,7 @@ interface Props {
 function TaskCard({ task, deleteTask, updateTask }: Props) {
   const [selectedDateState, setSelectedDateState] = useState<Date>(new Date());
   const [mouseIsOver, setMouseIsOver] = useState(false);
-  const [isOpenEditCardState, setIsOpenEditCardState] = useState(false);
+  const [editCardEnabledState, setEditCardEnabledState] = useState(false);
   const [isModalOpenState, setIsModalOpenState] = useState(false);
   const {
     setNodeRef,
@@ -40,11 +41,11 @@ function TaskCard({ task, deleteTask, updateTask }: Props) {
       type: "Task",
       task,
     },
-    disabled: isOpenEditCardState,
+    disabled: editCardEnabledState,
   });
 
   useEffect(() => {
-    setIsOpenEditCardState(true);
+    setEditCardEnabledState(true);                                                                                                                                                                
   }, []);
 
   const style = {
@@ -53,7 +54,7 @@ function TaskCard({ task, deleteTask, updateTask }: Props) {
   };
 
   const toggleEditMode = () => {
-    setIsOpenEditCardState((prev) => !prev);
+    setEditCardEnabledState((prev) => !prev);
     setMouseIsOver(false);
   };
 
@@ -79,7 +80,7 @@ function TaskCard({ task, deleteTask, updateTask }: Props) {
     );
   }
 
-  if (isOpenEditCardState) {
+  if (editCardEnabledState) {
     return (
       <div
         ref={setNodeRef}
