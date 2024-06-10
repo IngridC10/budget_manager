@@ -7,6 +7,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { useMemo, useState } from "react";
 import PlusIcon from "@/public/assets/icons/PlusIcon";
 import TaskCard from "./taskCard";
+import SelectComponent from "@/components/SelectComponent";
 
 interface Props {
   column: Column;
@@ -145,6 +146,7 @@ function ColumnContainer({
       </div>
 
       {/* Column task container */}
+      <SelectComponent />
       <div className="flex flex-col flex-grow gap-4 p-2 overflow-x-hidden overflow-y-auto">
         <SortableContext items={tasksIds}>
           {tasks.map((task) => (
