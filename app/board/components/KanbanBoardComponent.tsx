@@ -3,7 +3,7 @@ import PlusIcon from "@/public/assets/icons/PlusIcon";
 import { use, useEffect, useMemo, useState } from "react";
 import { Column, Task } from "../domain/models";
 import { Id } from "@/types/domain";
-import ColumnContainer from "./columnContainer";
+import ColumnContainer from "./ColumnContainerComponent";
 import {
   DndContext,
   DragEndEvent,
@@ -16,7 +16,7 @@ import {
 } from "@dnd-kit/core";
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { createPortal } from "react-dom";
-import TaskCard from "./taskCard";
+import TaskCard from "./TaskCardComponent";
 
 const defaultCols: Column[] = [
   {

@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 
-const KanbanBoard = dynamic(() => import("./components/kanbanBoard"), {
+const KanbanBoard = dynamic(() => import("./components/KanbanBoardComponent"), {
   ssr: false,
 });
 export default function BoardPage() {

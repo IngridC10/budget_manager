@@ -1,12 +1,23 @@
-import React from "react";
+import React, { SelectHTMLAttributes, ReactNode } from "react";
 
-const SelectComponent = () => {
+interface SelectComponentProps extends SelectHTMLAttributes<HTMLSelectElement> {
+  children: ReactNode;
+  className?: string;
+}
+
+const SelectComponent: React.FC<SelectComponentProps> = ({
+  className = "",
+  children,
+  ...props
+}) => {
   return (
-    <div>
-      <div className="flex flex-row items-center mt-2 justify-end gap-2">
-        <select className="w-32 h-6 text-black rounded-lg bg-colorLightBlue">
-          <option>Categorías</option>
-          <option>Asignaciones</option>
+    <div className=" w-full">
+      <div className="flex flex-row items-center justify-between ">
+        <select
+          {...props}
+          className={`  text-black rounded-lg bg-colorLightBlue ${className}`}
+        >
+          {children}
         </select>
         <div className="flex items-center group"></div>
       </div>
