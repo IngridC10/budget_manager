@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import InputComponent from "@/components/InputComponent";
 import SelectComponent from "@/components/SelectComponent";
-import TimeComponent from "@/components/CalendarComponent";
+import CalendarComponent from "@/components/CalendarComponent";
 import PlusIcon from "@/public/assets/icons/PlusIcon";
 import ButtonComponent from "@/components/ButtonComponent";
 import AddNewCategoryComponent from "./AddNewCategoryComponent";
@@ -39,7 +39,7 @@ const EditCardModalBodyComponent = () => {
           <option value="2">Gasto Fijo</option>
           <option value="3">Recurrente</option>
         </SelectComponent>
-        <TimeComponent />
+        <CalendarComponent />
       </div>
 
       <SelectComponent className="h-12 w-full mt-5">
