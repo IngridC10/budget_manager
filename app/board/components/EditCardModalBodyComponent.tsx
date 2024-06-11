@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import InputComponent from "@/components/InputComponent";
 import SelectComponent from "@/components/SelectComponent";
-import TimeComponent from "@/components/TimeComponent";
+import TimeComponent from "@/components/CalendarComponent";
 import PlusIcon from "@/public/assets/icons/PlusIcon";
 import ButtonComponent from "@/components/ButtonComponent";
 import AddNewCategoryComponent from "./AddNewCategoryComponent";
