@@ -131,7 +131,7 @@ function TaskCard({ task, deleteTask, updateTask }: Props) {
         </p>
 
         {mouseIsOver && (
-          <div className="absolute flex flex-row gap-4 p-2 -translate-y-1/2 rounded stroke-white right-4 top-1/2 bg-columnBackgroundColor opacity-60 hover:opacity-100">
+          <div className="absolute flex flex-row gap-4 p-6 -translate-y-1/2 rounded stroke-white right-4 top-1/2  ">
             <button onClick={handleEditClick}>
               <FontAwesomeIcon icon={faEdit} />
             </button>

@@ -1,6 +1,6 @@
 "use client";
 import PlusIcon from "@/public/assets/icons/PlusIcon";
-import { use, useEffect, useMemo, useState } from "react";
+import { use, useContext, useEffect, useMemo, useState } from "react";
 import { Column, Task } from "../domain/models";
 import { Id } from "@/types/domain";
 import ColumnContainer from "./ColumnContainerComponent";
@@ -17,6 +17,7 @@ import {
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { createPortal } from "react-dom";
 import TaskCard from "./TaskCardComponent";
+import { CategoryContext } from "@/data/CategoryContext";
 
 const defaultCols: Column[] = [
   {
@@ -103,6 +104,8 @@ const defaultTasks: Task[] = [
 ];
 
 function KanbanBoard() {
+  const { categories } = useContext(CategoryContext);
+
   const [columns, setColumns] = useState<Column[]>(defaultCols);
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns]);
 
@@ -131,6 +134,12 @@ function KanbanBoard() {
       <h1 className="flex font-bold  items-center text-black text-3xl">
         Budget Manager
       </h1>
+
+      <h2>
+        // Valor compartido: <strong>{categories.categoria}</strong>
+        //{" "}
+      </h2>
+
       <DndContext
         sensors={sensors}
         onDragStart={onDragStart}
