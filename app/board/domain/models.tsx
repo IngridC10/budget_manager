@@ -1,5 +1,5 @@
 import { Id } from "@/types/domain";
-
+import { ReactNode } from "react";
 export type Column = {
   id: Id;
   title: string;
@@ -20,6 +20,13 @@ export type Board = {
 export type Category = {
   id: Id;
   name: string;
+};
+
+export type IconNewCategory = {
+  id: Id;
+  name: string;
+  icon: ReactNode;
+  category?: string;
 };
 
 export type ExpenseType = {

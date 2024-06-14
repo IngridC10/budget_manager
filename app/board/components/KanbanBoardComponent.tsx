@@ -1,6 +1,6 @@
 "use client";
 import PlusIcon from "@/public/assets/icons/PlusIcon";
-import { use, useContext, useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { Column, Task } from "../domain/models";
 import { Id } from "@/types/domain";
 import ColumnContainer from "./ColumnContainerComponent";
@@ -17,104 +17,22 @@ import {
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { createPortal } from "react-dom";
 import TaskCard from "./TaskCardComponent";
-import { CategoryContext } from "@/data/CategoryContext";
-
-const defaultCols: Column[] = [
-  {
-    id: "todo",
-    title: "Todo",
-  },
-  {
-    id: "doing",
-    title: "Work in progress",
-  },
-  {
-    id: "done",
-    title: "Done",
-  },
-];
-
-const defaultTasks: Task[] = [
-  {
-    id: "1",
-    columnId: "todo",
-    content: "List admin APIs for dashboard",
-  },
-  {
-    id: "2",
-    columnId: "todo",
-    content:
-      "Develop user registration functionality with OTP delivered on SMS after email confirmation and phone number confirmation",
-  },
-  {
-    id: "3",
-    columnId: "doing",
-    content: "Conduct security testing",
-  },
-  {
-    id: "4",
-    columnId: "doing",
-    content: "Analyze competitors",
-  },
-  {
-    id: "5",
-    columnId: "done",
-    content: "Create UI kit documentation",
-  },
-  {
-    id: "6",
-    columnId: "done",
-    content: "Dev meeting",
-  },
-  {
-    id: "7",
-    columnId: "done",
-    content: "Deliver dashboard prototype",
-  },
-  {
-    id: "8",
-    columnId: "todo",
-    content: "Optimize application performance",
-  },
-  {
-    id: "9",
-    columnId: "todo",
-    content: "Implement data validation",
-  },
-  {
-    id: "10",
-    columnId: "todo",
-    content: "Design database schema",
-  },
-  {
-    id: "11",
-    columnId: "todo",
-    content: "Integrate SSL web certificates into workflow",
-  },
-  {
-    id: "12",
-    columnId: "doing",
-    content: "Implement error logging and monitoring",
-  },
-  {
-    id: "13",
-    columnId: "doing",
-    content: "Design and implement responsive UI",
-  },
-];
+import ColumnData from "@/data/ColumnData";
+import TaskData from "@/data/TaskData";
+import { Category } from "@mui/icons-material";
+import { CategoryContext } from "@/app/providers/CategoryProviders";
 
 function KanbanBoard() {
-  const { categories } = useContext(CategoryContext);
-
-  const [columns, setColumns] = useState<Column[]>(defaultCols);
+  // Usamos los datos importados para inicializar el estado
+  const [columns, setColumns] = useState<Column[]>(ColumnData);
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns]);
 
-  const [tasks, setTasks] = useState<Task[]>(defaultTasks);
+  const { categoriesState, setCategoriesState } = useContext(CategoryContext);
+
+  const [tasks, setTasks] = useState<Task[]>(TaskData);
 
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
-
   const [activeTask, setActiveTask] = useState<Task | null>(null);
-
   const [isClient, setIsClient] = useState(false);
 
   const sensors = useSensors(
@@ -125,6 +43,9 @@ function KanbanBoard() {
     })
   );
 
+  console.log("category state", categoriesState);
+  console.log("category set state", setCategoriesState);
+
   useEffect(() => {
     setIsClient(true);
   }, []);
@@ -134,11 +55,6 @@ function KanbanBoard() {
       <h1 className="flex font-bold  items-center text-black text-3xl">
         Budget Manager
       </h1>
-
-      <h2>
-        // Valor compartido: <strong>{categories.categoria}</strong>
-        //{" "}
-      </h2>
 
       <DndContext
         sensors={sensors}
