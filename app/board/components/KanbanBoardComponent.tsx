@@ -19,11 +19,9 @@ import { createPortal } from "react-dom";
 import TaskCard from "./TaskCardComponent";
 import ColumnData from "@/data/ColumnData";
 import TaskData from "@/data/TaskData";
-import { Category } from "@mui/icons-material";
 import { CategoryContext } from "@/app/providers/CategoryProviders";
 
 function KanbanBoard() {
-  // Usamos los datos importados para inicializar el estado
   const [columns, setColumns] = useState<Column[]>(ColumnData);
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns]);
 
@@ -236,14 +234,12 @@ function KanbanBoard() {
 
     if (!isActiveATask) return;
 
-    // Im dropping a Task over another Task
     if (isActiveATask && isOverATask) {
       setTasks((tasks) => {
         const activeIndex = tasks.findIndex((t) => t.id === activeId);
         const overIndex = tasks.findIndex((t) => t.id === overId);
 
         if (tasks[activeIndex].columnId != tasks[overIndex].columnId) {
-          // Fix introduced after video recording
           tasks[activeIndex].columnId = tasks[overIndex].columnId;
           return arrayMove(tasks, activeIndex, overIndex - 1);
         }
@@ -254,7 +250,6 @@ function KanbanBoard() {
 
     const isOverAColumn = over.data.current?.type === "Column";
 
-    // Im dropping a Task over a column
     if (isActiveATask && isOverAColumn) {
       setTasks((tasks) => {
         const activeIndex = tasks.findIndex((t) => t.id === activeId);
@@ -268,7 +263,6 @@ function KanbanBoard() {
 }
 
 function generateId() {
-  /* Generate a random number between 0 and 10000 */
   return Math.floor(Math.random() * 10001);
 }
 

@@ -28,6 +28,7 @@ function TaskCard({ task, deleteTask, updateTask }: Props) {
   const [isModalOpenState, setIsModalOpenState] = useState(false);
   const [isModalOpenDetailState, setIsModalOpenDetailState] = useState(false);
 
+  // that can be sorted by drag and drop
   const {
     setNodeRef,
     attributes,

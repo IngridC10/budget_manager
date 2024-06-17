@@ -2,15 +2,15 @@ import { Column } from "@/app/board/domain/models";
 
 const columnData: Column[] = [
   {
-    id: "todo",
+    id: "0",
     title: "Gastos en Salud",
   },
   {
-    id: "doing",
+    id: "1",
     title: "Gastos en Alimentos",
   },
   {
-    id: "done",
+    id: "2",
     title: "Gastos en Transporte",
   },
 ];

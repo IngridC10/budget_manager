@@ -60,7 +60,7 @@ const EditCardModalBodyComponent = () => {
 
         <button
           className="h-[37px] w-[37px] flex mt-5  justify-center ml-4 bg-blueColor rounded-full"
-          onClick={handlePlusIconClick} // Handle click to open the modal
+          onClick={handlePlusIconClick}
         >
           <PlusIcon />
         </button>
@@ -70,7 +70,6 @@ const EditCardModalBodyComponent = () => {
         <ButtonComponent text="Guardar" />
       </div>
 
-      {/* Render the modal only if isPlusIconModalOpen is true */}
       {isPlusIconModalOpen && (
         <ModalComponent
           onClose={closePlusIconModal}

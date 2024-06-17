@@ -1,5 +1,3 @@
-// simple login page with taildwind and react
-
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
@@ -32,6 +30,7 @@ export default function Home() {
               className="block mb-2 text-xl font-bold text-gray-700"
               htmlFor="password"
             >
+              {" "}
               Password
             </label>
             <input

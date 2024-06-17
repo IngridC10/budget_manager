@@ -91,7 +91,6 @@ function ColumnContainer({
   flex-col
   "
     >
-      {/* Column title */}
       <div
         {...attributes}
         {...listeners}
@@ -145,7 +144,6 @@ function ColumnContainer({
         </button>
       </div>
 
-      {/* Column task container */}
       <SelectComponent className="m-2">
         <option value="">Categorías</option>
         <option value="1">Asignaciones</option>
@@ -162,7 +160,7 @@ function ColumnContainer({
           ))}
         </SortableContext>
       </div>
-      {/* Column footer */}
+
       <button
         className="flex items-center gap-2 p-4 border-2 rounded-md border-columnBackgroundColor border-x-columnBackgroundColor hover:bg-mainBackgroundColor hover:text-colorLightBlue active:bg-black"
         onClick={() => {

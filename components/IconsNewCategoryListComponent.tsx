@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Box, Grid, Typography, IconButton } from "@mui/material";
-import IconsNewCategoryListData from "@/data/IconsNewCategoryListData"; // Ajusta la ruta de importación según sea necesario
+import IconsNewCategoryListData from "@/data/IconsNewCategoryListData";
 import { IconNewCategory } from "@/app/board/domain/models";
 
 const IconsCategoryListComponent: React.FC = () => {
@@ -12,7 +12,6 @@ const IconsCategoryListComponent: React.FC = () => {
     console.log(`Categoría seleccionada: ${category}`);
   };
 
-  // Organiza los íconos por categorías
   const groupedIcons = IconsNewCategoryListData.reduce((acc, item) => {
     const category = item.category || "Uncategorized";
     if (!acc[category]) {
@@ -26,10 +25,10 @@ const IconsCategoryListComponent: React.FC = () => {
     <Box p={2} border={1} borderColor="grey.300" borderRadius={4} m={0}>
       <Box display="flex" alignItems="center" mb={1}>
         <Typography variant="h6" gutterBottom marginTop={0}>
-          CATEGORÍAS
+          Categorías
         </Typography>
       </Box>
-      {/* Renderiza las categorías dinámicamente */}
+
       {Object.entries(groupedIcons).map(([category, items], index) => (
         <Box key={index} mb={2}>
           <Typography variant="subtitle1">{category}</Typography>

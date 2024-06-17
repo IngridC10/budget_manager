@@ -1,10 +1,6 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "../app.css";
-import AddCategoryComponent from "./board/components/AddNewCategoryComponent";
-import CategoryProviders from "./providers/CategoryProviders"; // Importa el CategoryProviders
-
-const inter = Inter({ subsets: ["latin"] });
+import CategoryProviders from "./providers/CategoryProviders";
 
 export const metadata: Metadata = {
   title: "Budget Manager",
@@ -18,12 +14,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className={inter.className}>
-        <CategoryProviders>
-          {" "}
-          {/* Envuelve los children con CategoryProviders */}
-          {children}
-        </CategoryProviders>
+      <body>
+        <CategoryProviders>{children}</CategoryProviders>
       </body>
     </html>
   );

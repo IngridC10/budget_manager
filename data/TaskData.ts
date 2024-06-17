@@ -9,8 +9,7 @@ const taskData: Task[] = [
   {
     id: "2",
     columnId: "todo",
-    content:
-      "Develop user registration functionality with OTP delivered on SMS after email confirmation and phone number confirmation",
+    content: "",
   },
   {
     id: "3",
