@@ -9,7 +9,6 @@ const IconsCategoryListComponent: React.FC = () => {
 
   const handleSelectCategory = (category: string) => {
     setSelectedCategoryState(category);
-    console.log(`Categoría seleccionada: ${category}`);
   };
 
   const groupedIcons = IconsNewCategoryListData.reduce((acc, item) => {
