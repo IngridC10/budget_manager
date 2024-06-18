@@ -1,5 +1,3 @@
-// simple login page with taildwind and react
-
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";

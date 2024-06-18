@@ -6,17 +6,16 @@ import PlusIcon from "@/public/assets/icons/PlusIcon";
 import ButtonComponent from "@/components/ButtonComponent";
 import AddNewCategoryComponent from "./AddNewCategoryComponent";
 import ModalComponent from "@/components/ModalComponent";
+import categoryData from "@/data/CategoryData";
+import ExpenseTypeData from "@/data/ExpenseTypeData";
 
 const EditCardModalBodyComponent = () => {
-  // State to control the visibility of the modal
   const [isPlusIconModalOpen, setIsPlusIconModalOpen] = useState(false);
 
-  // Function to open the modal
   const handlePlusIconClick = () => {
     setIsPlusIconModalOpen(true);
   };
 
-  // Function to close the modal
   const closePlusIconModal = () => {
     setIsPlusIconModalOpen(false);
   };
@@ -29,15 +28,16 @@ const EditCardModalBodyComponent = () => {
       <InputComponent placeholder="Digite el monto" />
 
       <div className="flex items-center justify-center w-full h-12 mt-5 rounded-lg bg-blueColor">
-        <h1>hola</h1>
+        <h1>Gastos en Salud</h1>
       </div>
 
       <div className="flex flex-row   mt-5 ">
-        <SelectComponent className="h-[40px] w-[234px]  ">
-          <option value="">Tipo de gasto</option>
-          <option value="1">Gasto Variable</option>
-          <option value="2">Gasto Fijo</option>
-          <option value="3">Recurrente</option>
+        <SelectComponent className="h-[40px] w-[234px]">
+          {ExpenseTypeData.map((expenseType) => (
+            <option key={expenseType.id} value={expenseType.id}>
+              {expenseType.name}
+            </option>
+          ))}
         </SelectComponent>
         <CalendarComponent />
       </div>
@@ -50,20 +50,17 @@ const EditCardModalBodyComponent = () => {
 
       <div className="flex flex-row items-center justify-center ">
         <SelectComponent className=" h-12 w-full mt-5">
-          <option value="">Categorías</option>
-          <option value="1">Viajes</option>
-          <option value="2">Salud</option>
-          <option value="3">Hogar</option>
-          <option value="4">Social</option>
-          <option value="5">Compras</option>
-          <option value="6">Deportes</option>
-          <option value="7">Teléfono</option>
-          <option value="8">Alimentos</option>
+          <option value="categories">Categorías</option>
+          {categoryData.map((category) => (
+            <option key={category.id} value={category.id}>
+              {category.name}
+            </option>
+          ))}
         </SelectComponent>
 
         <button
           className="h-[37px] w-[37px] flex mt-5  justify-center ml-4 bg-blueColor rounded-full"
-          onClick={handlePlusIconClick} // Handle click to open the modal
+          onClick={handlePlusIconClick}
         >
           <PlusIcon />
         </button>
@@ -73,7 +70,6 @@ const EditCardModalBodyComponent = () => {
         <ButtonComponent text="Guardar" />
       </div>
 
-      {/* Render the modal only if isPlusIconModalOpen is true */}
       {isPlusIconModalOpen && (
         <ModalComponent
           onClose={closePlusIconModal}
