@@ -20,9 +20,10 @@ interface Props {
   task: Task;
   deleteTask: (id: Id) => void;
   updateTask: (id: Id, content: string) => void;
+  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
 }
 
-function TaskCard({ task, deleteTask, updateTask }: Props) {
+function TaskCard({ task, deleteTask, updateTask, setTasks }: Props) {
   const [mouseIsOver, setMouseIsOver] = useState(false);
   const [editCardEnabledState, setEditCardEnabledState] = useState(false);
   const [isModalOpenState, setIsModalOpenState] = useState(false);
@@ -61,7 +62,9 @@ function TaskCard({ task, deleteTask, updateTask }: Props) {
 
   const handleEditClick = (e: { stopPropagation: () => void }) => {
     e.stopPropagation();
-    setIsModalOpenState(true); // Open modal Edition
+    setIsModalOpenState(true);
+
+    // Open modal Edition
   };
 
   const handleDetailClick = (e: { stopPropagation: () => void }) => {
@@ -133,17 +136,17 @@ function TaskCard({ task, deleteTask, updateTask }: Props) {
 
         {mouseIsOver && (
           <div className="absolute flex flex-row gap-4 p-6 -translate-y-1/2 rounded stroke-white right-4 top-1/2  ">
-            <button onClick={handleEditClick}>
+            <div onClick={handleEditClick}>
               <FontAwesomeIcon icon={faEdit} />
-            </button>
+            </div>
 
-            <button onClick={handleDetailClick}>
+            <div onClick={handleDetailClick}>
               <FontAwesomeIcon icon={faInfoCircle} />
-            </button>
+            </div>
 
-            <button onClick={() => deleteTask(task.id)}>
+            <div onClick={() => deleteTask(task.id)}>
               <TrashIcon />
-            </button>
+            </div>
           </div>
         )}
       </div>
@@ -151,7 +154,9 @@ function TaskCard({ task, deleteTask, updateTask }: Props) {
       {isModalOpenState && (
         <ModalComponent
           onClose={closeEditModal}
-          content={<EditCardModalBodyComponent />}
+          content={
+            <EditCardModalBodyComponent setTasks={setTasks} task={task} />
+          }
         />
       )}
 

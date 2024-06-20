@@ -8,8 +8,14 @@ import AddNewCategoryComponent from "./AddNewCategoryComponent";
 import ModalComponent from "@/components/ModalComponent";
 import categoryData from "@/data/CategoryData";
 import ExpenseTypeData from "@/data/ExpenseTypeData";
+import { Task } from "../domain/models";
+import { Id } from "@/types/domain";
 
-const EditCardModalBodyComponent = () => {
+interface Props {
+  task: Task;
+  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+}
+const EditCardModalBodyComponent: React.FC<Props> = ({ task, setTasks }) => {
   const [isPlusIconModalOpen, setIsPlusIconModalOpen] = useState(false);
 
   const handlePlusIconClick = () => {
@@ -20,10 +26,21 @@ const EditCardModalBodyComponent = () => {
     setIsPlusIconModalOpen(false);
   };
 
+  const handleSave = (id: Id, updatedContent: string) => {
+    setTasks((prevTasks) => {
+      return prevTasks.map((task) => {
+        if (task.id === id) {
+          return { ...task, content: updatedContent };
+        } else {
+          return task;
+        }
+      });
+    });
+  };
   return (
     <div className="flex flex-col  ">
       <label htmlFor="monto" className="text-xl text-blueColor text-start">
-        Ingrese el Monto:
+        Ingrese el Monto: {task.content}
       </label>
       <InputComponent placeholder="Digite el monto" />
 
@@ -66,8 +83,10 @@ const EditCardModalBodyComponent = () => {
         </button>
       </div>
       <div className="flex items-center justify-center mt-16">
-        {" "}
-        <ButtonComponent text="Guardar" />
+        <ButtonComponent
+          text="Guardar"
+          onClick={() => handleSave(task.id, task.content)}
+        />
       </div>
 
       {isPlusIconModalOpen && (

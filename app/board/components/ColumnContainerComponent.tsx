@@ -156,6 +156,7 @@ function ColumnContainer({
               task={task}
               deleteTask={deleteTask}
               updateTask={updateTask}
+              setTasks={(tasks) => {}}
             />
           ))}
         </SortableContext>

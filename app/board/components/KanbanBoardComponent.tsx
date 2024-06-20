@@ -19,14 +19,10 @@ import { createPortal } from "react-dom";
 import TaskCard from "./TaskCardComponent";
 import ColumnData from "@/data/ColumnData";
 import TaskData from "@/data/TaskData";
-import { CategoryContext } from "@/app/providers/CategoryProviders";
 
 function KanbanBoard() {
   const [columns, setColumns] = useState<Column[]>(ColumnData);
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns]);
-
-  const { categoriesState, setCategoriesState } = useContext(CategoryContext);
-
   const [tasks, setTasks] = useState<Task[]>(TaskData);
 
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
@@ -117,6 +113,7 @@ function KanbanBoard() {
               )}
               {activeTask && (
                 <TaskCard
+                  setTasks={setTasks}
                   task={activeTask}
                   deleteTask={deleteTask}
                   updateTask={updateTask}
@@ -134,6 +131,12 @@ function KanbanBoard() {
       id: generateId(),
       columnId,
       content: `Task ${tasks.length + 1}`,
+      title: "Gastos en Salud",
+      date: new Date().toISOString(),
+      categoryType: "Salud",
+      expenseType: "Variable",
+      ownerExpense: "Ingrid",
+      expenses: 80,
     };
 
     setTasks([...tasks, newTask]);

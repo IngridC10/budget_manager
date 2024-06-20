@@ -10,6 +10,12 @@ export type Task = {
   id: Id;
   columnId: Id;
   content: string;
+  title: string;
+  expenses: number;
+  date: string;
+  categoryType: string;
+  expenseType: string;
+  ownerExpense: string;
 };
 
 export type Board = {
