@@ -15,15 +15,15 @@ import {
 import ModalComponent from "@/components/ModalComponent";
 import EditCardModalBodyComponent from "./EditCardModalBodyComponent";
 import DetailCardModalBodyComponent from "./DetailCardModalBodyComponent";
+import { title } from "process";
 
 interface Props {
   task: Task;
   deleteTask: (id: Id) => void;
-  updateTask: (id: Id, content: string) => void;
-  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+  updateTask: (task: Task) => void;
 }
 
-function TaskCard({ task, deleteTask, updateTask, setTasks }: Props) {
+function TaskCard({ task, deleteTask, updateTask }: Props) {
   const [mouseIsOver, setMouseIsOver] = useState(false);
   const [editCardEnabledState, setEditCardEnabledState] = useState(false);
   const [isModalOpenState, setIsModalOpenState] = useState(false);
@@ -103,7 +103,7 @@ function TaskCard({ task, deleteTask, updateTask, setTasks }: Props) {
       >
         <textarea
           className="h-[90%] w-full resize-none border-none rounded bg-transparent text-white focus:outline-none"
-          value={task.content}
+          value={task.title}
           autoFocus
           placeholder="Task content here"
           onBlur={toggleEditMode}
@@ -112,7 +112,9 @@ function TaskCard({ task, deleteTask, updateTask, setTasks }: Props) {
               toggleEditMode();
             }
           }}
-          onChange={(e) => updateTask(task.id, e.target.value)}
+          onChange={(e) => {
+            updateTask({ ...task, title: e.target.value });
+          }}
         />
       </div>
     );
@@ -131,21 +133,24 @@ function TaskCard({ task, deleteTask, updateTask, setTasks }: Props) {
         onMouseLeave={() => setMouseIsOver(false)}
       >
         <p className="my-auto h-[90%] w-full overflow-y-auto overflow-x-hidden whitespace-pre-wrap">
-          {task.content}
+          {task.title}
         </p>
 
         {mouseIsOver && (
           <div className="absolute flex flex-row gap-4 p-6 -translate-y-1/2 rounded stroke-white right-4 top-1/2  ">
-            <div onClick={handleEditClick}>
-              <FontAwesomeIcon icon={faEdit} />
+            <div onClick={handleEditClick} className="h-[25px] w-[25px]">
+              <FontAwesomeIcon icon={faEdit} height={25} width={25} />
             </div>
 
             <div onClick={handleDetailClick}>
-              <FontAwesomeIcon icon={faInfoCircle} />
+              <FontAwesomeIcon icon={faInfoCircle} height={20} width={20} />
             </div>
 
-            <div onClick={() => deleteTask(task.id)}>
-              <TrashIcon />
+            <div
+              onClick={() => deleteTask(task.id)}
+              className="h-[25px] w-[25px]"
+            >
+              <FontAwesomeIcon icon={faTrash} height={25} width={25} />
             </div>
           </div>
         )}
@@ -155,7 +160,11 @@ function TaskCard({ task, deleteTask, updateTask, setTasks }: Props) {
         <ModalComponent
           onClose={closeEditModal}
           content={
-            <EditCardModalBodyComponent setTasks={setTasks} task={task} />
+            <EditCardModalBodyComponent
+              updateTask={updateTask}
+              task={task}
+              setModalOpenState={setIsModalOpenState}
+            />
           }
         />
       )}

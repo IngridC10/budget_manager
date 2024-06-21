@@ -24,10 +24,13 @@ function KanbanBoard() {
   const [columns, setColumns] = useState<Column[]>(ColumnData);
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns]);
   const [tasks, setTasks] = useState<Task[]>(TaskData);
+  console.log("set inicial tasks", setTasks);
 
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
   const [activeTask, setActiveTask] = useState<Task | null>(null);
   const [isClient, setIsClient] = useState(false);
+
+  console.log("tasks", tasks);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -113,7 +116,6 @@ function KanbanBoard() {
               )}
               {activeTask && (
                 <TaskCard
-                  setTasks={setTasks}
                   task={activeTask}
                   deleteTask={deleteTask}
                   updateTask={updateTask}
@@ -147,10 +149,14 @@ function KanbanBoard() {
     setTasks(newTasks);
   }
 
-  function updateTask(id: Id, content: string) {
-    const newTasks = tasks.map((task) => {
-      if (task.id !== id) return task;
-      return { ...task, content };
+  function updateTask(task: Task) {
+    console.log("update task", task);
+    const newTasks = tasks.map((t) => {
+      console.log("t.id: ", t.id);
+      if (t.id === task.id) {
+        return task;
+      }
+      return t;
     });
 
     setTasks(newTasks);

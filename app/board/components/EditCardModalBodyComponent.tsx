@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import InputComponent from "@/components/InputComponent";
 import SelectComponent from "@/components/SelectComponent";
 import CalendarComponent from "@/components/CalendarComponent";
@@ -13,10 +13,17 @@ import { Id } from "@/types/domain";
 
 interface Props {
   task: Task;
-  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
+  updateTask: (task: Task) => void;
+  setModalOpenState: React.Dispatch<React.SetStateAction<boolean>>;
 }
-const EditCardModalBodyComponent: React.FC<Props> = ({ task, setTasks }) => {
+const EditCardModalBodyComponent: React.FC<Props> = ({
+  task,
+  updateTask,
+  setModalOpenState,
+}) => {
   const [isPlusIconModalOpen, setIsPlusIconModalOpen] = useState(false);
+  const expenseAmountRef = useRef<HTMLInputElement>(null);
+  console.log("set tasks", updateTask);
 
   const handlePlusIconClick = () => {
     setIsPlusIconModalOpen(true);
@@ -25,24 +32,39 @@ const EditCardModalBodyComponent: React.FC<Props> = ({ task, setTasks }) => {
   const closePlusIconModal = () => {
     setIsPlusIconModalOpen(false);
   };
+  const handleSave = () => {
+    const expenseAmount: number = parseInt(
+      expenseAmountRef.current?.value || "0"
+    );
+    console.log("expenseAmount: ", expenseAmount);
 
-  const handleSave = (id: Id, updatedContent: string) => {
-    setTasks((prevTasks) => {
-      return prevTasks.map((task) => {
-        if (task.id === id) {
-          return { ...task, content: updatedContent };
-        } else {
-          return task;
-        }
-      });
-    });
+    const newTask = {
+      ...task,
+      expenses: expenseAmount,
+    };
+    updateTask(newTask);
+    // setTasks((prevTasks) => {
+    //   return prevTasks.map((task) => {
+    //     console.log("task.id: ", task.id);
+    //     if (task.id === newTask.id) {
+    //       return newTask;
+    //     } else {
+    //       return task;
+    //     }
+    //   });
+    // });
+    setModalOpenState(false);
   };
   return (
     <div className="flex flex-col  ">
       <label htmlFor="monto" className="text-xl text-blueColor text-start">
         Ingrese el Monto: {task.content}
       </label>
-      <InputComponent placeholder="Digite el monto" />
+      <InputComponent
+        placeholder="Digite el monto"
+        inputRef={expenseAmountRef}
+        defaultValue={task.expenses}
+      />
 
       <div className="flex items-center justify-center w-full h-12 mt-5 rounded-lg bg-blueColor">
         <h1>Gastos en Salud</h1>
@@ -83,10 +105,7 @@ const EditCardModalBodyComponent: React.FC<Props> = ({ task, setTasks }) => {
         </button>
       </div>
       <div className="flex items-center justify-center mt-16">
-        <ButtonComponent
-          text="Guardar"
-          onClick={() => handleSave(task.id, task.content)}
-        />
+        <ButtonComponent text="Guardar" onClick={() => handleSave()} />
       </div>
 
       {isPlusIconModalOpen && (
